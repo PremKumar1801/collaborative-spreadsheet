@@ -1,0 +1,257 @@
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─── CSS Variables ──────────────────────────────────────────────────────────── */
+:root {
+  --bg-base:      #0e0e0d;
+  --bg-surface:   #161614;
+  --bg-elevated:  #1e1e1b;
+  --bg-cell:      #131312;
+  --bg-cell-hover:#1a1a18;
+  --bg-header:    #0e0e0d;
+
+  --border-subtle:  rgba(255,255,255,0.06);
+  --border-default: rgba(255,255,255,0.10);
+  --border-focus:   #22c55e;
+
+  --text-primary:   #f0f0ec;
+  --text-secondary: #888884;
+  --text-muted:     #555552;
+  --text-accent:    #22c55e;
+
+  --accent:         #22c55e;
+  --accent-dim:     rgba(34,197,94,0.15);
+  --accent-glow:    rgba(34,197,94,0.08);
+}
+
+/* ─── Base Reset ─────────────────────────────────────────────────────────────── */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  background-color: var(--bg-base);
+  color: var(--text-primary);
+  font-family: 'Syne', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  height: 100%;
+}
+
+/* ─── Scrollbar ──────────────────────────────────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-base);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.12);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255,255,255,0.2);
+}
+
+/* ─── Grid Layout ────────────────────────────────────────────────────────────── */
+.spreadsheet-grid {
+  display: grid;
+  /* 1 col for row labels + 10 data cols */
+  grid-template-columns: 44px repeat(10, minmax(100px, 1fr));
+  border-left: 1px solid var(--border-subtle);
+  border-top: 1px solid var(--border-subtle);
+}
+
+/* Column header cells */
+.grid-col-header {
+  background: var(--bg-header);
+  border-right: 1px solid var(--border-subtle);
+  border-bottom: 1px solid var(--border-default);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Syne', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  padding: 6px 4px;
+  user-select: none;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+/* Row label cells */
+.grid-row-label {
+  background: var(--bg-header);
+  border-right: 1px solid var(--border-default);
+  border-bottom: 1px solid var(--border-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Syne', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+  user-select: none;
+  position: sticky;
+  left: 0;
+  z-index: 5;
+}
+
+/* Individual data cells */
+.grid-cell {
+  background: var(--bg-cell);
+  border-right: 1px solid var(--border-subtle);
+  border-bottom: 1px solid var(--border-subtle);
+  position: relative;
+  transition: background 0.1s;
+}
+
+.grid-cell:hover {
+  background: var(--bg-cell-hover);
+}
+
+.grid-cell.selected {
+  background: var(--accent-dim);
+  outline: 2px solid var(--accent);
+  outline-offset: -1px;
+  z-index: 2;
+}
+
+.grid-cell input {
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--text-primary);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12.5px;
+  font-weight: 400;
+  padding: 0 8px;
+  caret-color: var(--accent);
+}
+
+.grid-cell .cell-display {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  padding: 0 8px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12.5px;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: cell;
+}
+
+.grid-cell .cell-display.is-formula {
+  color: #60a5fa;
+}
+
+.grid-cell .cell-display.is-error {
+  color: #f87171;
+  font-size: 11px;
+}
+
+/* ─── Formula Bar ────────────────────────────────────────────────────────────── */
+.formula-bar {
+  background: var(--bg-surface);
+  border-bottom: 1px solid var(--border-default);
+  display: flex;
+  align-items: center;
+  gap: 0;
+}
+
+.formula-bar-cell-ref {
+  min-width: 72px;
+  padding: 0 12px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-accent);
+  border-right: 1px solid var(--border-default);
+  display: flex;
+  align-items: center;
+  height: 100%;
+  user-select: none;
+}
+
+.formula-bar input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  padding: 0 12px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  color: var(--text-primary);
+  caret-color: var(--accent);
+}
+
+/* ─── Animations ─────────────────────────────────────────────────────────────── */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.4; }
+}
+
+.animate-fade-in    { animation: fadeIn 0.35s ease both; }
+.animate-slide-down { animation: slideDown 0.2s ease both; }
+
+/* Staggered card animations */
+.card-1 { animation-delay: 0ms; }
+.card-2 { animation-delay: 60ms; }
+.card-3 { animation-delay: 120ms; }
+.card-4 { animation-delay: 180ms; }
+
+/* ─── Document Card ──────────────────────────────────────────────────────────── */
+.doc-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
+  transition: border-color 0.2s, background 0.2s, transform 0.2s;
+  cursor: pointer;
+}
+.doc-card:hover {
+  border-color: var(--border-default);
+  background: var(--bg-elevated);
+  transform: translateY(-1px);
+}
+
+/* ─── Presence Dot ───────────────────────────────────────────────────────────── */
+.presence-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  animation: pulse-dot 2s infinite;
+}
+
+/* ─── Save Indicator ─────────────────────────────────────────────────────────── */
+.save-indicator {
+  font-family: 'Syne', sans-serif;
+  font-size: 11.5px;
+  font-weight: 500;
+  letter-spacing: 0.03em;
+  transition: color 0.3s;
+}
