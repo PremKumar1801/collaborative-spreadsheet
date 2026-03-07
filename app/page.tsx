@@ -211,13 +211,6 @@ export default function DashboardPage() {
           </div>
         )}
 
-        {/* ── Footer hint ──────────────────────────────────────────────────── */}
-        <p
-          className="mt-12 text-center text-xs"
-          style={{ color: "var(--text-muted)", fontFamily: "'JetBrains Mono', monospace" }}
-        >
-          Firebase integration coming soon · All changes saved locally
-        </p>
       </main>
     </div>
   );
